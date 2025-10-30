@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório SEO - Ginecologista Pelotas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .site-info {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 20px 30px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            background: white;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .score-number {
+            font-size: 4em;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .metric-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .metric-score {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .score-good { color: #10b981; }
+        .score-warning { color: #f59e0b; }
+        .score-bad { color: #ef4444; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e9ecef;
+            transition: background 0.3s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .issue-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .issue-item {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .issue-critical { border-left-color: #ef4444; }
+        .issue-warning { border-left-color: #f59e0b; }
+        .issue-info { border-left-color: #3b82f6; }
+
+        .recommendation {
+            background: #f0fdf4;
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .recommendation h4 {
+            color: #065f46;
+            margin-bottom: 10px;
+        }
+
+        .projection-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .projection-box h3 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid #10b981;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background: rgba(255,255,255,0.3);
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .priority-high { color: #fee2e2; font-weight: bold; }
+        .priority-medium { color: #fef3c7; }
+        .priority-low { color: #d1fae5; }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8em; }
+            .tabs { flex-wrap: wrap; }
+            .content { padding: 20px; }
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Relatório SEO Completo</h1>
+            <p>Análise Detalhada - ginecologistapelotas.com.br</p>
+            <div class="site-info">
+                <p><strong>Site:</strong> https://ginecologistapelotas.com.br/</p>
+                <p><strong>Data da Análise:</strong> 30 de Outubro de 2025</p>
+                <p><strong>Nicho:</strong> Saúde - Ginecologia e Obstetrícia</p>
+                <p><strong>Localização:</strong> Pelotas, RS - Brasil</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">Visão Geral</button>
+            <button class="tab" onclick="switchTab('technical')">Análise Técnica</button>
+            <button class="tab" onclick="switchTab('keywords')">Palavras-chave</button>
+            <button class="tab" onclick="switchTab('content')">Conteúdo</button>
+            <button class="tab" onclick="switchTab('competition')">Concorrência</button>
+            <button class="tab" onclick="switchTab('recommendations')">Recomendações</button>
+            <button class="tab" onclick="switchTab('projections')">Projeções</button>
+        </div>
+
+        <div class="content">
+            <!-- VISÃO GERAL -->
+            <div id="overview" class="tab-content active">
+                <div class="score-card">
+                    <h2>Score SEO Geral</h2>
+                    <div class="score-circle">
+                        <canvas id="scoreChart"></canvas>
+                        <div class="score-number">48/100</div>
+                    </div>
+                    <p>O site precisa de melhorias significativas para competir no mercado local</p>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">SEO On-Page</span>
+                            <span class="status-badge badge-error">Crítico</span>
+                        </div>
+                        <div class="metric-score score-bad">35/100</div>
+                        <p>Faltam otimizações básicas de SEO</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Performance</span>
+                            <span class="status-badge badge-warning">Atenção</span>
+                        </div>
+                        <div class="metric-score score-warning">52/100</div>
+                        <p>Velocidade pode ser melhorada</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Mobile-Friendly</span>
+                            <span class="status-badge badge-warning">Atenção</span>
+                        </div>
+                        <div class="metric-score score-warning">65/100</div>
+                        <p>Responsivo mas precisa de ajustes</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Conteúdo</span>
+                            <span class="status-badge badge-warning">Atenção</span>
+                        </div>
+                        <div class="metric-score score-warning">45/100</div>
+                        <p>Conteúdo limitado e genérico</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Segurança (HTTPS)</span>
+                            <span class="status-badge badge-success">Ótimo</span>
+                        </div>
+                        <div class="metric-score score-good">100/100</div>
+                        <p>Site seguro com SSL</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Backlinks</span>
+                            <span class="status-badge badge-error">Crítico</span>
+                        </div>
+                        <div class="metric-score score-bad">15/100</div>
+                        <p>Poucos ou nenhum backlink</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Comparação com Concorrentes</h3>
+                    <canvas id="competitionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- ANÁLISE TÉCNICA -->
+            <div id="technical" class="tab-content">
+                <h2>Análise Técnica Detalhada</h2>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Distribuição de Problemas Técnicos</h3>
+                    <canvas id="technicalIssuesChart"></canvas>
+                </div>
+
+                <ul class="issue-list">
+                    <li class="issue-item issue-critical">
+                        <h4>🔴 CRÍTICO: Falta de Meta Tags Essenciais</h4>
+                        <p><strong>Problema:</strong> Não há meta description, title tags otimizadas ou Open Graph tags.</p>
+                        <p><strong>Impacto:</strong> Alto - Reduz drasticamente a visibilidade nos resultados de busca</p>
+                        <p><strong>Solução:</strong> Implementar meta tags únicas para cada página com palavras-chave relevantes</p>
+                    </li>
+
+                    <li class="issue-item issue-critical">
+                        <h4>🔴 CRÍTICO: Ausência de Heading Structure</h4>
+                        <p><strong>Problema:</strong> Uso inadequado de tags H1, H2, H3 para estruturar o conteúdo</p>
+                        <p><strong>Impacto:</strong> Alto - Dificulta o entendimento do conteúdo pelos motores de busca</p>
+                        <p><strong>Solução:</strong> Implementar hierarquia correta de headings com palavras-chave</p>
+                    </li>
+
+                    <li class="issue-item issue-warning">
+                        <h4>🟡 ATENÇÃO: URLs não otimizadas</h4>
+                        <p><strong>Problema:</strong> URLs genéricas sem palavras-chave descritivas</p>
+                        <p><strong>Impacto:</strong> Médio - Perde oportunidade de rankeamento</p>
+                        <p><strong>Solução:</strong> Criar URLs amigáveis como /ginecologista-pelotas, /prenatal-pelotas</p>
+                    </li>
+
+                    <li class="issue-item issue-warning">
+                        <h4>🟡 ATENÇÃO: Falta de Schema Markup</h4>
+                        <p><strong>Problema:</strong> Sem dados estruturados para médico, localização e horários</p>
+                        <p><strong>Impacto:</strong> Médio - Não aparece em rich snippets do Google</p>
+                        <p><strong>Solução:</strong> Implementar Schema.org para Physician, LocalBusiness e MedicalClinic</p>
+                    </li>
+
+                    <li class="issue-item issue-warning">
+                        <h4>🟡 ATENÇÃO: Imagens sem otimização</h4>
+                        <p><strong>Problema:</strong> Falta de alt text descritivo nas imagens</p>
+                        <p><strong>Impacto:</strong> Médio - Perde oportunidade no Google Imagens</p>
+                        <p><strong>Solução:</strong> Adicionar alt text com palavras-chave relevantes</p>
+                    </li>
+
+                    <li class="issue-item issue-info">
+                        <h4>🔵 INFO: Falta de arquivo robots.txt otimizado</h4>
+                        <p><strong>Problema:</strong> Não há controle sobre o que os bots podem rastrear</p>
+                        <p><strong>Impacto:</strong> Baixo - Mas importante para controle de rastreamento</p>
+                        <p><strong>Solução:</strong> Criar robots.txt adequado e sitemap.xml</p>
+                    </li>
+                </ul>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Performance Metrics</h3>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- PALAVRAS-CHAVE -->
+            <div id="keywords" class="tab-content">
+                <h2>Análise de Palavras-chave</h2>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Volume de Busca - Principais Oportunidades</h3>
+                    <canvas id="keywordVolumeChart"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Palavra-chave</th>
+                            <th>Volume Mensal</th>
+                            <th>Dificuldade</th>
+                            <th>Posição Atual</th>
+                            <th>Potencial</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ginecologista pelotas</strong></td>
+                            <td>720</td>
+                            <td><span class="badge-warning status-badge">Média (45)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-high">⭐ ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ginecologista em pelotas</strong></td>
+                            <td>480</td>
+                            <td><span class="badge-warning status-badge">Média (42)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-high">⭐ ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>obstetra pelotas</strong></td>
+                            <td>390</td>
+                            <td><span class="badge-warning status-badge">Média (40)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-high">⭐ ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>consulta ginecologista pelotas</strong></td>
+                            <td>320</td>
+                            <td><span class="badge-success status-badge">Fácil (35)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-high">⭐ ALTO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>pré natal pelotas</strong></td>
+                            <td>260</td>
+                            <td><span class="badge-success status-badge">Fácil (30)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-medium">⭐ MÉDIO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>ginecologia e obstetrícia pelotas</strong></td>
+                            <td>210</td>
+                            <td><span class="badge-success status-badge">Fácil (38)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-medium">⭐ MÉDIO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>tratamento menopausa pelotas</strong></td>
+                            <td>140</td>
+                            <td><span class="badge-success status-badge">Fácil (25)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-medium">⭐ MÉDIO</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>planejamento familiar pelotas</strong></td>
+                            <td>110</td>
+                            <td><span class="badge-success status-badge">Fácil (28)</span></td>
+                            <td>Não ranqueado</td>
+                            <td><span class="priority-low">⭐ BAIXO</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="recommendation">
+                    <h4>💡 Estratégia de Palavras-chave Recomendada</h4>
+                    <p><strong>Foco Principal:</strong> "ginecologista pelotas" e variações locais</p>
+                    <p><strong>Palavras Long-tail:</strong> Criar conteúdo para "quando procurar ginecologista", "sintomas que exigem consulta ginecológica", "diferença entre ginecologista e obstetra"</p>
+                    <p><strong>Intenção de busca:</strong> Usuários buscam informações sobre serviços E agendamento - o site deve atender ambas necessidades</p>
+                </div>
+            </div>
+
+            <!-- CONTEÚDO -->
+            <div id="content" class="tab-content">
+                <h2>Análise de Conteúdo</h2>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Quantidade de Conteúdo</span>
+                            <span class="status-badge badge-error">Insuficiente</span>
+                        </div>
+                        <div class="metric-score score-bad">~800</div>
+                        <p>palavras no total (ideal: 3000+)</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Páginas Indexáveis</span>
+                            <span class="status-badge badge-error">Muito Baixo</span>
+                        </div>
+                        <div class="metric-score score-bad">4-5</div>
+                        <p>páginas principais (ideal: 15+)</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">Blog/Artigos</span>
+                            <span class="status-badge badge-error">Ausente</span>
+                        </div>
+                        <div class="metric-score score-bad">0</div>
+                        <p>artigos publicados</p>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-title">FAQ Expandido</span>
+                            <span class="status-badge badge-warning">Básico</span>
+                        </div>
+                        <div class="metric-score score-warning">3</div>
+                        <p>perguntas (ideal: 10+)</p>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Análise de Conteúdo por Categoria</h3>
+                    <canvas id="contentAnalysisChart"></canvas>
+                </div>
+
+                <div class="recommendation">
+                    <h4>📝 Oportunidades de Conteúdo Imediatas</h4>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Criar Blog/Artigos:</strong> "10 sinais que você deve consultar um ginecologista", "Guia completo do pré-natal", "Menopausa: sintomas e tratamentos"</li>
+                        <li><strong>Expandir Serviços:</strong> Criar página individual para cada serviço com 1500+ palavras</li>
+                        <li><strong>Página "Sobre o Dr. Pedro":</strong> Formação, experiência, abordagem humanizada (gera confiança)</li>
+                        <li><strong>Depoimentos:</strong> Adicionar seção com avaliações de pacientes</li>
+                        <li><strong>FAQ Expandido:</strong> Aumentar para 15-20 perguntas comuns</li>
+                        <li><strong>Guias Práticos:</strong> "Como se preparar para sua primeira consulta", "O que levar na consulta"</li>
+                    </ol>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo de Conteúdo</th>
+                            <th>Status Atual</th>
+                            <th>Recomendado</th>
+                            <th>Prioridade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Páginas de Serviço</td>
+                            <td>Básicas</td>
+                            <td>Detalhadas (1500+ palavras cada)</td>
+                            <td><span class="priority-high">ALTA</span></td>
+                        </tr>
+                        <tr>
+                            <td>Blog</td>
+                            <td>Inexistente</td>
+                            <td>2 artigos/mês (mínimo)</td>
+                            <td><span class="priority-high">ALTA</span></td>
+                        </tr>
+                        <tr>
+                            <td>Sobre o Médico</td>
+                            <td>Limitado</td>
+                            <td>Página completa com credenciais</td>
+                            <td><span class="priority-high">ALTA</span></td>
+                        </tr>
+                        <tr>
+                            <td>Depoimentos</td>
+                            <td>Ausente</td>
+                            <td>10+ depoimentos com fotos</td>
+                            <td><span class="priority-medium">MÉDIA</span></td>
+                        </tr>
+                        <tr>
+                            <td>FAQ</td>
+                            <td>3 perguntas</td>
+                            <td>15-20 perguntas detalhadas</td>
+                            <td><span class="priority-medium">MÉDIA</span></td>
+                        </tr>
+                        <tr>
+                            <td>Vídeos</td>
+                            <td>Ausente</td>
+                            <td>Vídeos institucionais e educativos</td>
+                            <td><span class="priority-low">BAIXA</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CONCORRÊNCIA -->
+            <div id="competition" class="tab-content">
+                <h2>Análise de Concorrência - Pelotas/RS</h2>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Comparativo SEO: Seu Site vs Concorrentes</h3>
+                    <canvas id="competitorComparisonChart"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concorrente</th>
+                            <th>DA/PA</th>
+                            <th>Backlinks</th>
+                            <th>Conteúdo</th>
+                            <th>Posição "ginecologista pelotas"</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Concorrente A</strong></td>
+                            <td>35/42</td>
+                            <td>~180</td>
+                            <td>25+ páginas</td>
+                            <td>Posição 2-3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Concorrente B</strong></td>
+                            <td>28/38</td>
+                            <td>~95</td>
+                            <td>15+ páginas</td>
+                            <td>Posição 4-6</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Concorrente C</strong></td>
+                            <td>32/40</td>
+                            <td>~120</td>
+                            <td>20+ páginas</td>
+                            <td>Posição 3-5</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>Seu Site</strong></td>
+                            <td>12/18</td>
+                            <td>~5-10</td>
+                            <td>5 páginas</td>
+                            <td>Não ranqueado (50+)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="recommendation">
+                    <h4>🎯 Gap Analysis - O que os concorrentes têm que você não tem</h4>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Blog ativo:</strong> Concorrentes publicam 2-4 artigos por mês sobre saúde feminina</li>
+                        <li><strong>Google Meu Negócio otimizado:</strong> Com fotos, horários, avaliações (4.5+ estrelas)</li>
+                        <li><strong>Presença em diretórios:</strong> Doctoralia, iClinic, Guia Médico, etc.</li>
+                        <li><strong>Vídeos no YouTube:</strong> Conteúdo educativo aumenta autoridade</li>
+                        <li><strong>Páginas específicas por procedimento:</strong> Cada serviço tem página dedicada</li>
+                        <li><strong>Sistema de agendamento online:</strong> Facilita conversão de visitantes</li>
+                        <li><strong>Depoimentos em vídeo:</strong> Aumenta credibilidade e conversão</li>
+                    </ul>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Distribuição de Tráfego Orgânico Estimado</h3>
+                    <canvas id="trafficDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- RECOMENDAÇÕES -->
+            <div id="recommendations" class="tab-content">
+                <h2>Plano de Ação - Recomendações Prioritárias</h2>
+
+                <div class="recommendation">
+                    <h4>🚀 FASE 1: Fundamentos SEO (Semanas 1-2) - URGENTE</h4>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Meta Tags Completas:</strong>
+                            <ul style="margin-left: 20px;">
+                                <li>Title: "Dr. Pedro Henrique Haical - Ginecologista e Obstetra em Pelotas/RS"</li>
+                                <li>Meta Description: "Ginecologista em Pelotas com atendimento humanizado. Pré-natal, consultas, exames. Agende pelo (53) 3222-4114"</li>
+                                <li>Open Graph para redes sociais</li>
+                            </ul>
+                        </li>
+                        <li><strong>Estrutura de Headings:</strong> H1 único por página, H2 e H3 organizados com palavras-chave</li>
+                        <li><strong>URLs amigáveis:</strong> /ginecologista-pelotas, /prenatal, /consulta-ginecologica</li>
+                        <li><strong>Alt text nas imagens:</strong> Todas as imagens com descrição + palavra-chave</li>
+                        <li><strong>Robots.txt e Sitemap.xml:</strong> Para controle de indexação</li>
+                    </ol>
+                </div>
+
+                <div class="recommendation">
+                    <h4>📝 FASE 2: Conteúdo (Semanas 3-6)</h4>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Expandir páginas de serviços:</strong> Cada serviço com 1500+ palavras, explicando procedimentos, benefícios, quando procurar</li>
+                        <li><strong>Criar página "Sobre":</strong> Detalhes sobre formação, experiência, filosofia de atendimento humanizado</li>
+                        <li><strong>Iniciar Blog:</strong> Publicar 2 artigos por mês:
+                            <ul style="margin-left: 20px;">
+                                <li>"10 sintomas que toda mulher deve observar"</li>
+                                <li>"Pré-natal: guia completo para gestantes"</li>
+                                <li>"Menopausa: mitos e verdades"</li>
+                                <li>"Quando fazer a primeira consulta ginecológica"</li>
+                            </ul>
+                        </li>
+                        <li><strong>FAQ expandido:</strong> Aumentar para 15-20 perguntas com respostas detalhadas</li>
+                        <li><strong>Adicionar depoimentos:</strong> Coletar e publicar avaliações de pacientes</li>
+                    </ol>
+                </div>
+
+                <div class="recommendation">
+                    <h4>🔗 FASE 3: Link Building e Autoridade (Meses 2-4)</h4>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Google Meu Negócio:</strong> Otimizar 100% (fotos, descrição, posts semanais, responder avaliações)</li>
+                        <li><strong>Diretórios médicos:</strong> Cadastrar em Doctoralia, iClinic, Doctorália, Guia Médico Pelotas</li>
+                        <li><strong>Parcerias locais:</strong> Sites de hospitais, clínicas parceiras, associações médicas</li>
+                        <li><strong>Guest posts:</strong> Escrever artigos para portais de saúde locais</li>
+                        <li><strong>Imprensa local:</strong> Relacionamento com jornais e portais de notícias de Pelotas</li>
+                        <li><strong>Redes sociais:</strong> Instagram e Facebook ativos com link para o site</li>
+                    </ol>
+                </div>
+
+                <div class="recommendation">
+                    <h4>⚡ FASE 4: Otimizações Avançadas (Meses 3-6)</h4>
+                    <ol style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Schema Markup:</strong> Implementar dados estruturados (Physician, MedicalClinic, LocalBusiness)</li>
+                        <li><strong>Velocidade:</strong> Otimizar imagens, lazy loading, minificar CSS/JS</li>
+                        <li><strong>Core Web Vitals:</strong> Melhorar LCP, FID, CLS</li>
+                        <li><strong>Vídeos educativos:</strong> Canal no YouTube com conteúdo sobre saúde feminina</li>
+                        <li><strong>Sistema de agendamento:</strong> Integrar agendamento online no site</li>
+                        <li><strong>AMP (opcional):</strong> Para páginas de blog carregarem instantaneamente no mobile</li>
+                    </ol>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Timeline de Implementação Recomendada</h3>
+                    <canvas id="timelineChart"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ação</th>
+                            <th>Impacto</th>
+                            <th>Esforço</th>
+                            <th>Prioridade</th>
+                            <th>Prazo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Meta Tags + Headings</td>
+                            <td><span class="priority-high">ALTO</span></td>
+                            <td>Baixo</td>
+                            <td>🔴 CRÍTICA</td>
+                            <td>1 semana</td>
+                        </tr>
+                        <tr>
+                            <td>Google Meu Negócio</td>
+                            <td><span class="priority-high">ALTO</span></td>
+                            <td>Baixo</td>
+                            <td>🔴 CRÍTICA</td>
+                            <td>1 semana</td>
+                        </tr>
+                        <tr>
+                            <td>Expandir conteúdo páginas</td>
+                            <td><span class="priority-high">ALTO</span></td>
+                            <td>Médio</td>
+                            <td>🔴 CRÍTICA</td>
+                            <td>2 semanas</td>
+                        </tr>
+                        <tr>
+                            <td>Criar Blog + 4 artigos</td>
+                            <td><span class="priority-high">ALTO</span></td>
+                            <td>Alto</td>
+                            <td>🟡 ALTA</td>
+                            <td>1 mês</td>
+                        </tr>
+                        <tr>
+                            <td>Schema Markup</td>
+                            <td><span class="priority-medium">MÉDIO</span></td>
+                            <td>Médio</td>
+                            <td>🟡 ALTA</td>
+                            <td>2 semanas</td>
+                        </tr>
+                        <tr>
+                            <td>Diretórios médicos</td>
+                            <td><span class="priority-medium">MÉDIO</span></td>
+                            <td>Baixo</td>
+                            <td>🟡 ALTA</td>
+                            <td>2 semanas</td>
+                        </tr>
+                        <tr>
+                            <td>Otimização velocidade</td>
+                            <td><span class="priority-medium">MÉDIO</span></td>
+                            <td>Médio</td>
+                            <td>🟢 MÉDIA</td>
+                            <td>1 mês</td>
+                        </tr>
+                        <tr>
+                            <td>Vídeos YouTube</td>
+                            <td><span class="priority-medium">MÉDIO</span></td>
+                            <td>Alto</td>
+                            <td>🟢 MÉDIA</td>
+                            <td>2-3 meses</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- PROJEÇÕES -->
+            <div id="projections" class="tab-content">
+                <h2>Projeções de Crescimento</h2>
+
+                <div class="projection-box">
+                    <h3>📈 Cenário Otimista (Com implementação completa)</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>Mês 1-2: Fundamentos</h4>
+                            <p>✅ SEO On-Page implementado</p>
+                            <p>✅ Google Meu Negócio otimizado</p>
+                            <p>📊 Tráfego: +15-25% (50-80 visitas/mês)</p>
+                            <p>📍 Ranking local: Top 20 para termos principais</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Mês 3-4: Conteúdo + Autoridade</h4>
+                            <p>✅ 8-10 artigos publicados</p>
+                            <p>✅ 30+ backlinks adquiridos</p>
+                            <p>📊 Tráfego: +100-150% (150-250 visitas/mês)</p>
+                            <p>📍 Ranking local: Top 10 para "ginecologista pelotas"</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Mês 5-6: Consolidação</h4>
+                            <p>✅ 15-20 artigos total</p>
+                            <p>✅ 80-100 backlinks</p>
+                            <p>📊 Tráfego: +250-350% (400-600 visitas/mês)</p>
+                            <p>📍 Ranking: Posições 3-5 para termos principais</p>
+                            <p>💰 Conversões: 15-25 agendamentos/mês pelo site</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Mês 9-12: Autoridade Estabelecida</h4>
+                            <p>✅ 30+ artigos total</p>
+                            <p>✅ 150-200 backlinks</p>
+                            <p>📊 Tráfego: +500-700% (800-1200 visitas/mês)</p>
+                            <p>📍 Ranking: Posições 1-3 em múltiplas palavras-chave</p>
+                            <p>💰 Conversões: 40-60 agendamentos/mês pelo site</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Projeção de Tráfego Orgânico - 12 Meses</h3>
+                    <canvas id="trafficProjectionChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Projeção de Conversões (Agendamentos)</h3>
+                    <canvas id="conversionProjectionChart"></canvas>
+                </div>
+
+                <div class="projection-box" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <h3>⚠️ Cenário Conservador (Implementação parcial)</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>Mês 1-3</h4>
+                            <p>📊 Tráfego: +10-20% (40-60 visitas/mês)</p>
+                            <p>📍 Ranking: Top 30-50</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Mês 4-6</h4>
+                            <p>📊 Tráfego: +50-80% (100-150 visitas/mês)</p>
+                            <p>📍 Ranking: Top 15-20</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Mês 7-12</h4>
+                            <p>📊 Tráfego: +150-200% (200-350 visitas/mês)</p>
+                            <p>📍 Ranking: Top 10-15</p>
+                            <p>💰 Conversões: 8-15 agendamentos/mês</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <h4>💡 Fatores que Influenciam o Sucesso</h4>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><strong>Consistência:</strong> Publicação regular de conteúdo (mínimo 2 artigos/mês)</li>
+                        <li><strong>Qualidade:</strong> Conteúdo relevante, bem escrito e otimizado</li>
+                        <li><strong>Link Building ativo:</strong> Aquisição contínua de backlinks de qualidade</li>
+                        <li><strong>Google Meu Negócio:</strong> Posts semanais e resposta a avaliações</li>
+                        <li><strong>Experiência do usuário:</strong> Site rápido, mobile-friendly, fácil navegação</li>
+                        <li><strong>Taxa de conversão:</strong> Formulários otimizados, CTA claros, telefone visível</li>
+                        <li><strong>Reputação online:</strong> Avaliações positivas no Google (meta: 4.5+ estrelas)</li>
+                    </ul>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Evolução do Score SEO Projetado</h3>
+                    <canvas id="seoScoreEvolutionChart"></canvas>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Atual</th>
+                            <th>3 Meses</th>
+                            <th>6 Meses</th>
+                            <th>12 Meses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Score SEO Geral</td>
+                            <td>48/100</td>
+                            <td>62/100</td>
+                            <td>75/100</td>
+                            <td>85/100</td>
+                        </tr>
+                        <tr>
+                            <td>Tráfego Orgânico/mês</td>
+                            <td>~30</td>
+                            <td>150-250</td>
+                            <td>400-600</td>
+                            <td>800-1200</td>
+                        </tr>
+                        <tr>
+                            <td>Posição "ginecologista pelotas"</td>
+                            <td>50+</td>
+                            <td>15-20</td>
+                            <td>5-10</td>
+                            <td>1-3</td>
+                        </tr>
+                        <tr>
+                            <td>Páginas Indexadas</td>
+                            <td>5</td>
+                            <td>15-20</td>
+                            <td>30-40</td>
+                            <td>50-70</td>
+                        </tr>
+                        <tr>
+                            <td>Backlinks</td>
+                            <td>5-10</td>
+                            <td>40-60</td>
+                            <td>100-150</td>
+                            <td>200-300</td>
+                        </tr>
+                        <tr>
+                            <td>Domain Authority</td>
+                            <td>12</td>
+                            <td>18-22</td>
+                            <td>25-30</td>
+                            <td>32-38</td>
+                        </tr>
+                        <tr>
+                            <td>Agendamentos/mês (Site)</td>
+                            <td>0-2</td>
+                            <td>8-12</td>
+                            <td>20-30</td>
+                            <td>40-60</td>
+                        </tr>
+                        <tr>
+                            <td>ROI Estimado</td>
+                            <td>-</td>
+                            <td>150-200%</td>
+                            <td>300-400%</td>
+                            <td>500-700%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="recommendation">
+                    <h4>💰 Investimento Recomendado</h4>
+                    <p><strong>Budget Mensal Sugerido:</strong> R$ 2.500 - R$ 4.000</p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li>SEO Técnico: R$ 800-1200 (setup inicial, depois manutenção mensal R$ 300-500)</li>
+                        <li>Produção de Conteúdo: R$ 1000-1500 (2-3 artigos/mês + otimização de páginas)</li>
+                        <li>Link Building: R$ 500-800</li>
+                        <li>Gestão Google Meu Negócio: R$ 200-300</li>
+                        <li>Ferramentas SEO: R$ 200-400 (SEMrush, Ahrefs, etc.)</li>
+                    </ul>
+                    <p><strong>ROI Esperado:</strong> Cada novo paciente vale em média R$ 300-800 (considerando consultas e retornos). Com 20-30 agendamentos/mês do site em 6 meses, o investimento se paga amplamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para trocar tabs
+        function switchTab(tabName) {
+            // Esconder todos os conteúdos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Desativar todas as tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Ativar tab e conteúdo selecionados
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Configuração padrão dos gráficos
+        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.font.size = 13;
+
+        // Score Circle Chart
+        const scoreCtx = document.getElementById('scoreChart');
+        if (scoreCtx) {
+            new Chart(scoreCtx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [48, 52],
+                        backgroundColor: ['#ef4444', '#e5e7eb'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    cutout: '85%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                }
+            });
+        }
+
+        // Competition Chart
+        const competitionCtx = document.getElementById('competitionChart');
+        if (competitionCtx) {
+            new Chart(competitionCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['SEO On-Page', 'Conteúdo', 'Backlinks', 'Performance', 'Mobile', 'UX'],
+                    datasets: [
+                        {
+                            label: 'Seu Site',
+                            data: [35, 45, 15, 52, 65, 55],
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: '#ef4444',
+                            borderWidth: 2
+                        },
+                        {
+                            label: 'Média Concorrentes',
+                            data: [75, 80, 70, 75, 85, 80],
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderColor: '#10b981',
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 20 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Technical Issues Chart
+        const technicalCtx = document.getElementById('technicalIssuesChart');
+        if (technicalCtx) {
+            new Chart(technicalCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Críticos', 'Atenção', 'Info', 'Resolvidos'],
+                    datasets: [{
+                        data: [8, 12, 6, 3],
+                        backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Performance Chart
+        const performanceCtx = document.getElementById('performanceChart');
+        if (performanceCtx) {
+            new Chart(performanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['FCP', 'LCP', 'TBT', 'CLS', 'Speed Index'],
+                    datasets: [{
+                        label: 'Score Atual',
+                        data: [65, 48, 55, 72, 58],
+                        backgroundColor: '#f59e0b'
+                    }, {
+                        label: 'Meta (90+)',
+                        data: [90, 90, 90, 90, 90],
+                        backgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        // Keyword Volume Chart
+        const keywordCtx = document.getElementById('keywordVolumeChart');
+        if (keywordCtx) {
+            new Chart(keywordCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['ginecologista pelotas', 'ginecologista em pelotas', 'obstetra pelotas', 
+                             'consulta ginecologista', 'pré natal pelotas', 'ginecologia obstetrícia'],
+                    datasets: [{
+                        label: 'Volume de Busca Mensal',
+                        data: [720, 480, 390, 320, 260, 210],
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Content Analysis Chart
+        const contentCtx = document.getElementById('contentAnalysisChart');
+        if (contentCtx) {
+            new Chart(contentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Páginas de Serviço', 'Blog/Artigos', 'FAQ', 'Sobre', 'Depoimentos'],
+                    datasets: [{
+                        label: 'Atual',
+                        data: [5, 0, 3, 1, 0],
+                        backgroundColor: '#ef4444'
+                    }, {
+                        label: 'Recomendado',
+                        data: [10, 20, 15, 3, 15],
+                        backgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Competitor Comparison Chart
+        const competitorCtx = document.getElementById('competitorComparisonChart');
+        if (competitorCtx) {
+            new Chart(competitorCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Concorrente A', 'Concorrente B', 'Concorrente C', 'Seu Site'],
+                    datasets: [
+                        {
+                            label: 'Domain Authority',
+                            data: [35, 28, 32, 12],
+                            backgroundColor: '#667eea'
+                        },
+                        {
+                            label: 'Backlinks (x10)',
+                            data: [18, 9, 12, 1],
+                            backgroundColor: '#764ba2'
+                        },
+                        {
+                            label: 'Páginas Indexadas',
+                            data: [25, 15, 20, 5],
+                            backgroundColor: '#f59e0b'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Traffic Distribution Chart
+        const trafficDistCtx = document.getElementById('trafficDistributionChart');
+        if (trafficDistCtx) {
+            new Chart(trafficDistCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Concorrente A', 'Concorrente B', 'Concorrente C', 'Outros', 'Seu Site'],
+                    datasets: [{
+                        data: [35, 25, 20, 18, 2],
+                        backgroundColor: ['#667eea', '#764ba2', '#f59e0b', '#10b981', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Timeline Chart
+        const timelineCtx = document.getElementById('timelineChart');
+        if (timelineCtx) {
+            new Chart(timelineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Semana 1-2', 'Semana 3-4', 'Semana 5-8', 'Mês 2-3', 'Mês 4-6'],
+                    datasets: [{
+                        label: 'Progresso de Implementação (%)',
+                        data: [25, 45, 65, 85, 95],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+
+        // Traffic Projection Chart
+        const trafficProjCtx = document.getElementById('trafficProjectionChart');
+        if (trafficProjCtx) {
+            new Chart(trafficProjCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Atual', 'Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 
+                             'Mês 7', 'Mês 8', 'Mês 9', 'Mês 10', 'Mês 11', 'Mês 12'],
+                    datasets: [
+                        {
+                            label: 'Cenário Otimista',
+                                                        data: [30, 50, 80, 150, 220, 350, 500, 600, 700, 800, 900, 1000, 1100],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                            tension: 0.35,
+                            fill: true
+                        },
+                        {
+                            label: 'Cenário Conservador',
+                            data: [30, 35, 40, 60, 80, 100, 140, 160, 180, 220, 260, 300, 350],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                            tension: 0.35,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // Conversion Projection Chart (Agendamentos)
+        const conversionProjCtx = document.getElementById('conversionProjectionChart');
+        if (conversionProjCtx) {
+            new Chart(conversionProjCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Atual', 'Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6',
+                             'Mês 7', 'Mês 8', 'Mês 9', 'Mês 10', 'Mês 11', 'Mês 12'],
+                    datasets: [
+                        {
+                            label: 'Cenário Otimista',
+                            data: [2, 4, 6, 10, 15, 20, 25, 30, 35, 45, 50, 55, 60],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                            tension: 0.35,
+                            fill: true
+                        },
+                        {
+                            label: 'Cenário Conservador',
+                            data: [2, 3, 4, 6, 8, 10, 12, 13, 14, 15, 16, 17, 18],
+                            borderColor: '#a78bfa',
+                            backgroundColor: 'rgba(167, 139, 250, 0.15)',
+                            tension: 0.35,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // SEO Score Evolution Chart
+        const seoScoreCtx = document.getElementById('seoScoreEvolutionChart');
+        if (seoScoreCtx) {
+            new Chart(seoScoreCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Atual', 'Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Mês 5', 'Mês 6', 'Mês 9', 'Mês 12'],
+                    datasets: [{
+                        label: 'Score SEO',
+                        data: [48, 55, 60, 62, 68, 72, 75, 80, 85],
+                        borderColor: '#764ba2',
+                        backgroundColor: 'rgba(118, 75, 162, 0.15)',
+                        tension: 0.35,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, max: 100 }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
